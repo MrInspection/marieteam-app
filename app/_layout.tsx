@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import "../global.css";
+import {PaperProvider} from "react-native-paper";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -31,9 +32,12 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{headerShown: false}}/>
-      <Stack.Screen name="+not-found"/>
-    </Stack>
+    <PaperProvider>
+      <Stack>
+        <Stack.Screen name="index" options={{headerShown: false}}/>
+        <Stack.Screen name="captainlog" options={{headerShown: false}}/>
+        <Stack.Screen name="+not-found"/>
+      </Stack>
+    </PaperProvider>
   );
 }
