@@ -35,7 +35,7 @@ export default function RootLayout() {
     <PaperProvider>
       <Stack>
         <Stack.Screen name="index" options={{headerShown: false}}/>
-        <Stack.Screen name="captainlog" options={{headerShown: false}}/>
+        <Stack.Screen name="captainlog/[crossing]" options={{headerShown: false}}/>
         <Stack.Screen name="+not-found"/>
       </Stack>
     </PaperProvider>
