@@ -1,50 +1,14 @@
-# Welcome to your Expo app 👋
+# MarieTeam Captain App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> This project is using the MarieTeam Crossing API to create a Captain Log for the customer from our web application. Checkout the project [here](https://github.com/MrInspection/marieteam-web).
 
-## Get started
+## 📗 How to run this project ?
 
-1. Install dependencies
+To run this project on your local environment, follow the following steps :
 
-   ```bash
-   npm install
-   ```
+- Clone the repository to your local machine or download the source code.
+- Run the command `pnpm install` in the project directory to install the **required** dependencies
+- Create a new file named `.env` in the project directory and add the variables as shown in the `.env.example` file.
+- Run the command `pnpx expo start` to start the project.
+- Choose the `Android` or `iOS` simulator to run the project or download the Expo Go app to run the project on your device.
 
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
