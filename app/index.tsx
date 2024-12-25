@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState} from "react";
 import {
   View,
   Text,
@@ -6,10 +6,10 @@ import {
   FlatList,
   Image,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Picker } from "@react-native-picker/picker";
+import {SafeAreaView} from "react-native-safe-area-context";
+import {Picker} from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { router } from "expo-router";
+import {router} from "expo-router";
 
 type GeographicalZone =
   | "AIX"
@@ -53,6 +53,8 @@ interface SearchResult {
 }
 
 export default function HomePage() {
+  const authorization = process.env.EXPO_PUBLIC_API_KEY!
+
   const [zone, setZone] = useState<GeographicalZone>("AIX");
   const [date, setDate] = useState(new Date());
   const [results, setResults] = useState<SearchResult[] | null>(null);
@@ -70,12 +72,10 @@ export default function HomePage() {
     setLoading(true);
     try {
       const formattedDate = date.toISOString();
-      console.log(formattedDate)
-      console.log(zone)
       const response = await fetch(
         `https://marieteam.vercel.app/api/crossing?geographicalZone=${zone}&date=${formattedDate}`,
         {
-          headers: { Authorization: `Bearer splabs_oXvAlnM2fNfnZip1EadUxOBeitGpahzvZQfHaeotMrz9sakYOsqJ01WPn` },
+          headers: {Authorization: authorization},
         }
       );
       const data = await response.json();
@@ -89,14 +89,11 @@ export default function HomePage() {
 
   return (
     <SafeAreaView className="flex flex-col h-full w-full bg-white p-5">
-
       <View className="flex flex-row items-center justify-center mb-6 w-full">
         <Text className="text-xl/7 font-semibold tracking-tight text-center">
           MarieTeam Captain.
         </Text>
       </View>
-
-
 
       <View className="grid gap-4 bg-brand-50 p-6 rounded-2xl">
         <Text className="text-lg font-medium text-slate-700">
@@ -120,7 +117,7 @@ export default function HomePage() {
               "SEIN",
               "YEU",
             ].map((z) => (
-              <Picker.Item key={z} label={z} value={z} />
+              <Picker.Item key={z} label={z} value={z}/>
             ))}
           </Picker>
         </View>
@@ -155,7 +152,6 @@ export default function HomePage() {
         <Text className="text-xl/7 font-medium">Crossings</Text>
       </View>
 
-
       <View className="flex-1 mt-4 px-5">
         {loading ? (
           <Text className="text-center text-slate-500">Loading...</Text>
@@ -163,18 +159,18 @@ export default function HomePage() {
           <FlatList
             data={results}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
+            renderItem={({item}) => (
               <TouchableOpacity
                 className="flex flex-row items-center gap-4 border-b border-slate-200 py-3"
                 onPress={() =>
                   router.push({
                     pathname: "/captainlog/[crossing]",
-                    params: { crossing: item.id },
+                    params: {crossing: item.id},
                   })
                 }
               >
                 <Image
-                  source={{ uri: item.boat.imageUrl }}
+                  source={{uri: item.boat.imageUrl}}
                   className="w-16 h-16 rounded-lg"
                 />
                 <View>

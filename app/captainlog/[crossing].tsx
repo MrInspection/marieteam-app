@@ -15,6 +15,7 @@ import {Icons} from "@/constants/icons";
 type SeaCondition = "CALM" | "SLIGHTLY_ROUGH" | "ROUGH" | "VERY_ROUGH";
 
 export default function CaptainLog() {
+  const authorization = process.env.EXPO_PUBLIC_API_KEY!
   const {crossing} = useLocalSearchParams<{ crossing: string }>();
 
   const [seaCondition, setSeaCondition] = useState<SeaCondition>("CALM");
@@ -31,7 +32,7 @@ export default function CaptainLog() {
     try {
       const response = await fetch("https://marieteam.vercel.app/api/crossing/captainlogs", {
         method: "POST",
-        headers: { "Authorization": "Bearer splabs_oXvAlnM2fNfnZip1EadUxOBeitGpahzvZQfHaeotMrz9sakYOsqJ01WPn"},
+        headers: { "Authorization": authorization},
         body: JSON.stringify({
           crossingId: crossing,
           seaCondition: logData.seaCondition,
