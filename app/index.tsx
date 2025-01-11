@@ -1,15 +1,11 @@
 import {useState} from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  Image,
-} from "react-native";
+import {View, Text, TouchableOpacity, ScrollView} from "react-native";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Picker} from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import {router} from "expo-router";
+import CrossingCard from "@/components/crossing-card";
+import CrossingEmptyState from "@/components/crossing-empty-state";
+import Select from "@/components/select";
+import CrossingLoadingState from "@/components/crossing-loading-state";
 
 type GeographicalZone =
   | "AIX"
@@ -23,7 +19,7 @@ type GeographicalZone =
   | "SEIN"
   | "YEU";
 
-interface SearchResult {
+export interface SearchResult {
   id: string;
   departureTime: string;
   boatId: string;
@@ -51,6 +47,19 @@ interface SearchResult {
     updatedAt: string;
   };
 }
+
+const geographicalZones: { label: string; value: string }[] = [
+  {label: "AIX", value: "AIX"},
+  {label: "BATZ", value: "BATZ"},
+  {label: "BELLE_ILE_EN_MER", value: "BELLE_ILE_EN_MER"},
+  {label: "BREHAT", value: "BREHAT"},
+  {label: "HOUAT", value: "HOUAT"},
+  {label: "ILE_DE_GROIX", value: "ILE_DE_GROIX"},
+  {label: "MOLENE", value: "MOLENE"},
+  {label: "OUESSANT", value: "OUESSANT"},
+  {label: "SEIN", value: "SEIN"},
+  {label: "YEU", value: "YEU"},
+];
 
 export default function HomePage() {
   const authorization = process.env.EXPO_PUBLIC_API_KEY!
@@ -86,111 +95,59 @@ export default function HomePage() {
       setLoading(false);
     }
   };
-
   return (
     <SafeAreaView className="flex flex-col h-full w-full bg-white p-5">
-      <View className="flex flex-row items-center justify-center mb-6 w-full">
-        <Text className="text-xl/7 font-semibold tracking-tight text-center">
-          MarieTeam Captain.
-        </Text>
+      <View className="mt-6 mb-6">
+        <Text className="text-3xl font-bold mb-1">MarieTeam Captaīn</Text>
       </View>
-
-      <View className="grid gap-4 bg-brand-50 p-6 rounded-2xl">
-        <Text className="text-lg font-medium text-slate-700">
-          Search for Crossings
+      <View className="border border-dashed rounded-3xl px-5 py-4 border-neutral-300 bg-brand-25"
+            style={{borderStyle: "dashed"}}>
+        <Text className="text-lg font-medium text-neutral-700 mb-2">
+          Search Filters
         </Text>
-        {/* Zone Picker */}
-        <View className="border border-slate-300 rounded-lg">
-          <Picker
-            selectedValue={zone}
-            onValueChange={(value) => setZone(value as GeographicalZone)}
+        <View className="flex flex-row items-center gap-2">
+          <View>
+            <Select
+              options={geographicalZones}
+              selectedValue={zone}
+              onValueChange={(value) => setZone(value as GeographicalZone)}
+              placeholder="Select a Zone"
+            />
+          </View>
+          <TouchableOpacity
+            className="border border-neutral-300 rounded-2xl px-4 py-3 bg-white"
+            onPress={() => setShowDatePicker(true)}
           >
-            {[
-              "AIX",
-              "BATZ",
-              "BELLE_ILE_EN_MER",
-              "BREHAT",
-              "HOUAT",
-              "ILE_DE_GROIX",
-              "MOLENE",
-              "OUESSANT",
-              "SEIN",
-              "YEU",
-            ].map((z) => (
-              <Picker.Item key={z} label={z} value={z}/>
-            ))}
-          </Picker>
+            <Text className="text-sm">Departure: {date.toISOString().split("T")[0]}</Text>
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
         </View>
-
-        {/* Date Picker */}
-        <TouchableOpacity
-          className="border border-slate-300 rounded-lg px-4 py-3 text-lg"
-          onPress={() => setShowDatePicker(true)}
-        >
-          <Text>{date.toISOString().split("T")[0]}</Text>
-        </TouchableOpacity>
-        {showDatePicker && (
-          <DateTimePicker
-            value={date}
-            mode="date"
-            display="default"
-            onChange={handleDateChange}
-          />
-        )}
-
-        {/* Search Button */}
-        <TouchableOpacity
-          className="bg-brand-600 rounded-full p-4"
-          onPress={handleSearch}
-        >
-          <Text className="text-white font-medium text-center">Search Crossing</Text>
-        </TouchableOpacity>
       </View>
-
-      {/* Results */}
+      <TouchableOpacity
+        className="bg-black rounded-full p-4 mt-4"
+        onPress={handleSearch}
+      >
+        <Text className="text-white font-medium text-center">Search Crossing</Text>
+      </TouchableOpacity>
       <View className="mt-8">
-        <Text className="text-xl/7 font-medium">Crossings</Text>
+        <Text className="text-xl/7 font-semibold">Available Trips</Text>
       </View>
-
-      <View className="flex-1 mt-4 px-5">
-        {loading ? (
-          <Text className="text-center text-slate-500">Loading...</Text>
-        ) : results?.length ? (
-          <FlatList
-            data={results}
-            keyExtractor={(item) => item.id}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                className="flex flex-row items-center gap-4 border-b border-slate-200 py-3"
-                onPress={() =>
-                  router.push({
-                    pathname: "/captainlog/[crossing]",
-                    params: {crossing: item.id},
-                  })
-                }
-              >
-                <Image
-                  source={{uri: item.boat.imageUrl}}
-                  className="w-16 h-16 rounded-lg"
-                />
-                <View>
-                  <Text className="text-lg font-semibold">{item.boat.name}</Text>
-                  <Text className="text-slate-500">
-                    {item.route.departurePort} → {item.route.arrivalPort}
-                  </Text>
-                  <Text className="text-slate-400">
-                    Departure: {new Date(item.departureTime).toLocaleString()}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            )}
-          />
-        ) : (
-          <Text className="text-center text-slate-500">
-            No results found. Try a different date or zone.
-          </Text>
-        )}
-      </View>
+      <ScrollView className="w-full" showsVerticalScrollIndicator={false}>
+        <View className="flex-1 mt-4 flex-col gap-4">
+          {loading ? <CrossingLoadingState /> : results && results.length > 0 ? (
+            results.map((item) => <CrossingCard key={item.id} {...item} />)
+          ) : (
+            <CrossingEmptyState/>
+          )}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
