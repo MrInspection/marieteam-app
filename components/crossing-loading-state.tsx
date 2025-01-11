@@ -1,4 +1,4 @@
-import {ActivityIndicator, Image, Text, View} from "react-native";
+import {ActivityIndicator, Text, View} from "react-native";
 
 export default function CrossingLoadingState() {
   return (

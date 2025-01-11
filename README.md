@@ -1,6 +1,6 @@
-# MarieTeam Captain App
+# MarieTeam Captaīn
 
-![](./assets/images/splabs-preview.png)
+![](./assets/images/marieteam-app.png)
 
 > This project is using the MarieTeam Crossing API to create a Captain Log for the customer from our web application. Checkout the project [here](https://github.com/MrInspection/marieteam-web).
 
